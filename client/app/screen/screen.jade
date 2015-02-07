@@ -1,0 +1,38 @@
+div(ng-include='"components/navbar/navbar.html"')
+.container
+  .col-md-12
+    form
+      .screen.active
+        h3.screen-quesiton In which Address, Neighborhood, City or Zip you want to live in
+        input.screen-input(type="text", placeholder="Type in... and press enter", autofocus="true")
+        .screen-acitons
+          .pull-right
+            button.btn.btn-primary.btn-lg Next
+      .screen.active
+        h3.screen-quesiton Whats your budget like?
+        ul.list-inline.row-fluid
+          li.s-opt-btn.col-lg-3.col-md-3.col-sm-3
+            .opt-btn
+              input(type="radio", id="p1", name="pricerange")
+              label(for="p1") less than 999$
+          li.s-opt-btn.col-lg-3.col-md-3.col-sm-3
+            .opt-btn
+              input(type="radio", id="p2", name="pricerange")
+              label(for="p2") 1000$ to 1999$
+          li.s-opt-btn.col-lg-3.col-md-3.col-sm-3
+            .opt-btn
+              input(type="radio", id="p3", name="pricerange")
+              label(for="p3") 2000$ to 3000$
+          //- li.s-opt-btn.col-lg-4.col-md-3.col-sm-4
+          //-   .col-lg-4
+          //-     = "From"
+          //-     br
+          //-     input(type="text")
+          //-   .col-lg-4
+          //-     = " to "
+          //-     br
+          //-     input(type="text")
+        .clearfix
+        .screen-acitons
+          .pull-right
+            a.btn.btn-primary.btn-lg(href="result") Next
