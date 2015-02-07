@@ -1,22 +1,20 @@
 'use strict'
 
 angular.module 'mhimcApp'
-.controller 'MainCtrl', ($scope, $http, socket) ->
+.controller 'MainCtrl', ($scope, $location) ->
   $scope.awesomeThings = []
 
-  $http.get('/api/things').success (awesomeThings) ->
-    $scope.awesomeThings = awesomeThings
-    socket.syncUpdates 'thing', $scope.awesomeThings
+  # $http.get('/api/things/search/university').success (data) ->
+  #   console.log data
+  $scope.address = ""
 
-  $scope.addThing = ->
-    return if $scope.newThing is ''
-    $http.post '/api/things',
-      name: $scope.newThing
+  $scope.addressOptions =
+    country: 'us'
+    #types: '(cities)'
 
-    $scope.newThing = ''
+  $scope.loadResults = ->
+    localStorage['select_loaction'] = $scope.address;
+    $location.path("/results")
 
-  $scope.deleteThing = (thing) ->
-    $http.delete '/api/things/' + thing._id
 
-  $scope.$on '$destroy', ->
-    socket.unsyncUpdates 'thing'
+

@@ -7,6 +7,7 @@ angular.module 'mhimcApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap'
+  'ngAutocomplete'
 ]
 .config ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) ->
   $urlRouterProvider
