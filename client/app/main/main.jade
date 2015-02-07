@@ -1,25 +1,36 @@
-div(ng-include='"components/navbar/navbar.html"')
+//div(ng-include='"components/navbar/navbar.html"')
 
+br
+.bg.c2
+br
+br
 header#banner.hero-unit
   .container
-    h1 Find your dream house!
-    p.lead Find a safe, affordable, and accessbale house
+    h1 Can I live here
+    br
+    .locaiton-input
+      form(ng-submit="loadResults()")
+        input.form-control.locaiton-input-text(type="text", ng-autocomplete, ng-model="address", options="addressOptions", details="details", autofocus="true", placeholder="Type Address, Neighborhood, City or Zip")
+        em.fa.fa-map-marker
+        button.hidden(type='submit')
 
-.container
-  .row
-    .col-lg-12
-      h1.page-header What are you looking for
-      .row
-        .col-lg-4
-        .col-lg-2
-          a.block(href='/screen') Buy a house
-        .col-lg-2
-          a.block(href='') Rent a house
-        .col-lg-4
 
-footer.footer
-  .container
-    p
-      | My Home is my castel
-      = ' | '
-      = "All rights reserved © 2015"
+
+//- .container
+//-   .row
+//-     .col-lg-12
+//-       h1.page-header What are you looking for
+//-       .row
+//-         .col-lg-4
+//-         .col-lg-2
+//-           a.block(href='/screen') Buy a house
+//-         .col-lg-2
+//-           a.block(href='') Rent a house
+//-         .col-lg-4
+
+//- footer.footer
+//-   .container
+//-     p
+//-       | My Home is my castel
+//-       = ' | '
+//-       = "All rights reserved © 2015"

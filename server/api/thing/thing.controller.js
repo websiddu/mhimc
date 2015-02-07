@@ -11,6 +11,7 @@
 
 var _ = require('lodash');
 var Thing = require('./thing.model');
+var http = require('http');
 
 // Get list of things
 exports.index = function(req, res) {
@@ -50,6 +51,22 @@ exports.update = function(req, res) {
     });
   });
 };
+
+exports.getsearch = function(req, res) {
+  if(req.params.prefix) {
+    http.get("http://ac.zillowstatic.com/getRegionByPrefix?prefix=" + req.params.prefix +"&json", function(result) {
+      var bodyChunks = [];
+      result.on('data', function(chunk) {
+        bodyChunks.push(chunk);
+      }).on('end', function() {
+        var body = Buffer.concat(bodyChunks);
+        return res.json(200, JSON.parse(body))
+      })
+    }).on('error', function(e) {
+      console.log("Got error: " + e.message);
+    });
+  }
+}
 
 // Deletes a thing from the DB.
 exports.destroy = function(req, res) {
