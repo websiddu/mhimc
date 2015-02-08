@@ -58,11 +58,13 @@ toolkit.getDates = function(){
 
 toolkit.computeSeattleIncidentsRecords = function(){
   var self = this;
+  // IncidentsRecord.remove({}, function(){
+  // });
   _.forEach(self.getDates(), function (date){
     self.findSeattleIncidentsRecord(date.month, date.year, function(incidentsRecord){
       if (!incidentsRecord){
         self.getSeattleIncidents(date.month, date.year, function(incidents){
-          console.log('Seattle incidents', date.month, date.year, incidents.length);
+          console.log('Seattle incidents fetched: ', date.month + '/' + date.year, 'nb: ', incidents.length);
           IncidentsRecord.create(self.incidentsToIncidentsRecord(date.month, date.year, incidents));
         });
       }

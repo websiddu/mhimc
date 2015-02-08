@@ -78,7 +78,13 @@ exports.getLocation = function(req, res) {
         var data = {
           isSafe:                  Toolkit.isSafe(seattleIncidentsRecords, incidentsRecords),
           incidentsRecords:        incidentsRecords,
-          seattleIncidentsRecords: seattleIncidentsRecords
+          seattleIncidentsRecords: seattleIncidentsRecords,
+          config: {
+            radiusM: toolkit.RADIUS_M,
+            seattleAreaM2: toolkit.SEATTLE_AREA_M2,
+            coeff: toolkit.COEFF,
+            nbYears: toolkit.NB_YEARS
+          }
         }
         return res.json(200, data);
       });
