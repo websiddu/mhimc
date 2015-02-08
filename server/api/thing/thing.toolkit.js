@@ -5,7 +5,9 @@ var q = require('q');
 var _ = require('lodash');
 var IncidentsRecord = require('../incidentsRecord/incidentsRecord.model');
 
-var toolkit = {};
+var toolkit = {
+  RADIUS: 804
+};
 
 toolkit.computeLocationScore = function(incidentsRecords){
   return _.reduce(incidentsRecords, function (sum, incidentsRecord) {
@@ -96,6 +98,7 @@ toolkit.getLocationIncidentsRecords = function (location, callback) {
   var self = this;
   var dates = this.getDates();
   var date = _.last(dates);
+
   this.getLocationIncidentsAfterDate(location, date, function (incidents){
     var incidentsRecords = _.map(dates, function(date){
       var monthlyIncidents = _.filter(incidents, function(incident){
@@ -103,15 +106,13 @@ toolkit.getLocationIncidentsRecords = function (location, callback) {
       });
       return self.incidentsToIncidentsRecord(date.month, date.year, monthlyIncidents);
     });
-    console.log(incidentsRecords.length);
     callback.call(self, incidentsRecords);
   });
 };
 
 toolkit.getLocationIncidentsAfterDate = function (location, date, callback) {
   var limit = 50000;
-  var radius = 1000;
-  var params = "$where=within_circle(location, " + location.lat + ", " + location.long + ", " + radius + ")"
+  var params = "$where=within_circle(location, " + location.lat + ", " + location.long + ", " + this.RADIUS + ")"
     " AND ( year > " + date.year + " OR ( year >= " + date.year + " AND month >= " + date.month + " ))" +
     "&$limit=" + limit;
 
