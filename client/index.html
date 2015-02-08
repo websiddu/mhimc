@@ -14,14 +14,17 @@
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
       <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css" />
+      <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="app/app.css">
       <!-- injector:css -->
+      <link rel="stylesheet" href="app/common/none.css">
       <!-- endinjector -->
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
     <!-- endbuild -->
+    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
   </head>
   <body ng-app="mhimcApp">
     <!--[if lt IE 7]>
@@ -67,7 +70,6 @@
         <script src="bower_components/leaflet/dist/leaflet.js"></script>
         <script src="bower_components/d3/d3.js"></script>
         <script src="app/common/metricsgraphics.js"></script>
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
         <script src="bower_components/ngAutocomplete/src/ngAutocomplete.js"></script>
         <script src="bower_components/nvd3/build/nv.d3.js"></script>
           <!-- injector:js -->
