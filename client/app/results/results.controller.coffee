@@ -108,7 +108,7 @@ angular.module 'mhimcApp'
 
       rt.yAxis.tickFormat d3.format('f')
 
-      d3.select('#chart1 svg').datum($scope.data.chart).call rt
+      d3.select('#chart1 svg').datum([$scope.data.chart[0], $scope.data.chart[1], $scope.data.chart[2], $scope.data.chart[3]]).call rt
 
       nv.utils.windowResize rt.update
       return
