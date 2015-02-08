@@ -6,11 +6,11 @@ br
 br
 header#banner.hero-unit
   .container
-    h1 Can I live here
+    h1 Should I really live here?
     br
     .locaiton-input
       form(ng-submit="loadResults()")
-        input.form-control.locaiton-input-text(type="text", id="address", ng-autocomplete='true', ng-model="address", options="addressOptions", details="details", autofocus="true", placeholder="Type Address, Neighborhood, City or Zip")
+        input.form-control.locaiton-input-text(type="text", id="address", ng-autocomplete='true', ng-model="address", options="addressOptions", details="details", autofocus="true", placeholder="The address is...")
         em.fa.fa-map-marker
         button.hidden(type='submit')
 

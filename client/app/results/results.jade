@@ -1,16 +1,23 @@
 .page
-  #map
-  .chart
-    h4 Crimes around you
-    #chart
-      svg
+  .deatils
+    #map
+    .chart
+      .pull-left
+        h4 # of incidents near your place
+          small  within a 1/2 a mile radius in the last 3 years
+      .pull-right
+        button.btn.btn-sm.btn-info(ng-click="toggleChart()", style="margin-right: 90px") Detailed Report
+      #chart
+        svg
+      #chart1(ng-if="showDrilldown")
+        svg
   .loader(ng-if="loading")
     .img
       img.img-responsive(src="assets/images/loading.svg", alt="")
       span.text-muted Loading....
-  #result(ng-if="showResult")
+  #result(ng-if="showResult", ng-class="{no: result == 'No'}")
     .result-box
-      .result-button Yes
+      .result-button {{result}}
       a.find-why(href="", ng-click="enableshowResult()") Find out why!
 
 

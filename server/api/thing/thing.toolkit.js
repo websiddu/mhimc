@@ -8,10 +8,11 @@ var incidentTypes = require('./thing.incidentTypes');
 
 var toolkit = {
   RADIUS_M: 804,
-  SEATTLE_AREA_M2: 217200000,
-  COEFF: 1,
+  SEATTLE_AREA_M2: 143000000,
+  COEFF: 1.25,
   NB_YEARS: 3
 };
+
 
 toolkit.computeScore = function(incidentsRecords, seattleFlag){
   var totalIncidents = _.reduce(incidentsRecords, function (sum, incidentsRecord) {

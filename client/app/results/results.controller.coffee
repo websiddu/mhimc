@@ -2,13 +2,26 @@
 
 
 angular.module 'mhimcApp'
-.controller 'ResultsCtrl', ($scope, crimeData) ->
+.controller 'ResultsCtrl', ($scope, crimeData, $location) ->
 
-  $scope.showResult = true
+  $scope.showResult = false
+  $scope.showDeatils = false
   $scope.currentAddress = localStorage['current_loaction']
   $scope.loading = true
   circle = null
-  seattledata = {"key":"Avg. Crimes in seattle","values":[[1325404800000, 45], [1328083200000, 41], [1330588800000,41],[1333263600000,42],[1335855600000,44],[1338534000000,45],[1341126000000,43],[1343804400000,46],[1346482800000,47],[1349074800000,44],[1351753200000,43],[1354348800000,40],[1357027200000,42],[1359705600000,46],[1362124800000,40],[1364799600000,46],[1367391600000,45],[1370070000000,51],[1372662000000,48],[1375340400000,52],[1378018800000,51],[1380610800000,50],[1383289200000,53],[1385884800000,50],[1388563200000,48],[1391241600000,51],[1393660800000,43],[1396335600000,61],[1398927600000,58],[1401606000000,55],[1404198000000,57],[1406876400000,88],[1409554800000,98],[1412146800000,88],[1414825200000,81],[1417420800000,45],[1420099200000,44],[1422777600000,53]],"color":"red"}
+  seattledata = {"key":"Avg. Crimes in seattle","values":[[1325404800000, 62], [1328083200000, 59], [1330588800000,62],[1333263600000,64],[1335855600000,67],[1338534000000,68],[1341126000000,65],[1343804400000,70],[1346482800000,71],[1349074800000,67],[1351753200000,65],[1354348800000,61],[1357027200000,64],[1359705600000,69],[1362124800000,61],[1364799600000,71],[1367391600000,68],[1370070000000,77],[1372662000000,73],[1375340400000,79],[1378018800000,77],[1380610800000,75],[1383289200000,81],[1385884800000,76],[1388563200000,73],[1391241600000,78],[1393660800000,65],[1396335600000,93],[1398927600000,88],[1401606000000,84],[1404198000000,87],[1406876400000,134],[1409554800000,149],[1412146800000,133],[1414825200000,124],[1417420800000,68],[1420099200000,67],[1422777600000,81]],"color":"red"}
+  seatteltotal = 2976;
+
+  $scope.showDrilldown = false;
+
+  locationArea = 804.2 * 804.2 * Math.PI;
+  seattleAvgIndex = Math.round(seatteltotal/143);
+  $scope.data = null;
+
+  $scope.isSafe = true;
+  $scope.result = '';
+
+
   _options =
     # maxBounds: bounds
     # zoomControl: false
@@ -72,12 +85,52 @@ angular.module 'mhimcApp'
     #lr.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
 
+  $scope.toggleChart = ->
+    $scope.showDrilldown = !$scope.showDrilldown
+    nv.addGraph ->
+      rt = nv.models.stackedAreaChart()
+        .margin({right: 100})
+        .x((d) -> d[0])
+        .y((d) -> d[1])
+        .showControls(true)
+        .clipEdge(true)
+        .useInteractiveGuideline(true)
+
+
+        # .margin(right: 100)
+        # .useInteractiveGuideline(true)
+        # .rightAlignYAxis(true)
+        # .showControls(true)
+        # .clipEdge(true)
+
+      rt.xAxis.tickFormat (d) ->
+        d3.time.format('%b %Y') new Date(d)
+
+      rt.yAxis.tickFormat d3.format('f')
+
+      d3.select('#chart1 svg').datum($scope.data.chart).call rt
+
+      nv.utils.windowResize rt.update
+      return
+
+
+
   _loadLocationCrimeDetails = ->
     $scope.loading = true
 
     crimeData.inRadius(localStorage['lat'], localStorage['lng'], 804.4)
       .success (data, status) ->
-          data.chart.push(seattledata)
+          $scope.data = data;
+          # data.chart.push(seattledata)
+
+          if (data.supertotal / Math.PI) < seattleAvgIndex
+            $scope.isSafe = false;
+            $scope.result = "No"
+          else
+            $scope.result = "Yes"
+            $scope.isSafe = true
+
+          $scope.showResult = true
 
           nv.addGraph ->
             chart = nv.models.lineChart()
@@ -99,7 +152,7 @@ angular.module 'mhimcApp'
 
             chart.yAxis.tickFormat d3.format('f')
 
-            d3.select('#chart svg').datum(data.chart).call chart
+            d3.select('#chart svg').datum([seattledata, data.chart[4]]).call chart
 
             nv.utils.windowResize chart.update
             return

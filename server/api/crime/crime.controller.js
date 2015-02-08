@@ -64,10 +64,12 @@ exports.getcrimedata = function(req, res) {
   var _parseData = function(data) {
 
     var dataToMap, dm, dt, hos, index, val, newdata = [], crimelocaitons = [];
+    var supertotal = data.length;
 
     data.forEach(function(n) {
       dt = new Date(n.occurred_date_or_date_range_start);
       dm = "m" + (dt.getUTCMonth()) + "y" + (dt.getUTCFullYear());
+
 
       if (newdata[dm] === void 0) {
         newdata[dm] = {};
@@ -76,12 +78,14 @@ exports.getcrimedata = function(req, res) {
           'PublicPeace': 0,
           'ViolentCrime': 0,
           'Property': 0,
-          'Other': 0
+          'Other': 0,
+          'Total': 0
         };
         //newdata[dm].offence = {}
         newdata[dm].date = new Date(dt.getUTCFullYear(), dt.getUTCMonth());
       } else {
         newdata[dm].count = newdata[dm].count + 1;
+        newdata[dm].offence['Total']++;
         if(dt.getUTCFullYear() == 2014 && dt.getUTCMonth() > 5) {
           var crimeinfo = {
             location: n.location,
@@ -125,8 +129,11 @@ exports.getcrimedata = function(req, res) {
       'Other': {
         key: 'Other',
         values: []
-      }
-
+      },
+      'Total': {
+          key: 'Incidents near your locaiton',
+          values: []
+        }
     };
 
     for (index in newdata) {
@@ -135,7 +142,7 @@ exports.getcrimedata = function(req, res) {
       datawithkeys['ViolentCrime'].values.push([val.date.getTime(), val.offence['ViolentCrime']])
       datawithkeys['Property'].values.push([val.date.getTime(), val.offence['Property']])
       datawithkeys['Other'].values.push([val.date.getTime(), val.offence['Other']])
-      // datawithkeys['Total'].values.push([val.date.getTime(), val.offence['Total']])
+      datawithkeys['Total'].values.push([val.date.getTime(), val.offence['Total']])
       if (val.date.getUTCFullYear() >= 2015) {
         console.log("Dont do anythin..");
       } else {
@@ -149,7 +156,7 @@ exports.getcrimedata = function(req, res) {
       datawioutkeys.push(datawithkeys[index]);
     }
 
-    return res.json(200, {chart: datawioutkeys, mapdata: crimelocaitons});
+    return res.json(200, {supertotal: supertotal, chart: datawioutkeys, mapdata: crimelocaitons});
   }
 
 }
