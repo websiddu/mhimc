@@ -4,6 +4,7 @@ var http = require('http');
 var q = require('q');
 var _ = require('lodash');
 var IncidentsRecord = require('../incidentsRecord/incidentsRecord.model');
+var incidentTypes = require('./thing.incidentTypes');
 
 var toolkit = {
   RADIUS_M: 804,
@@ -18,11 +19,23 @@ toolkit.computeScore = function(incidentsRecords){
 };
 
 toolkit.incidentsToIncidentsRecord = function(month, year, incidents){
-  return {
+  var self = this;
+  var incidentsRecord = {
     month: month,
     year: year,
-    totalIncidents: incidents.length
+    date: new Date(year, month),
+    totalIncidents: incidents.length,
+    totalIncidentsOther: 0,
+    totalIncidentsProperty: 0,
+    totalIncidentsViolentCrime: 0,
+    totalIncidentsPublicPeace: 0
   };
+
+  _.forEach(incidents, function (incident) {
+    incidentsRecord['totalIncidents' + self.getIncidentType(incident)]++;
+  });
+
+  return incidentsRecord;
 };
 
 toolkit.getDates = function(){
@@ -117,7 +130,7 @@ toolkit.getLocationIncidentsRecords = function (location, callback) {
 
 toolkit.getLocationIncidentsAfterDate = function (location, date, callback) {
   var limit = 50000;
-  var params = "$where=within_circle(location, " + location.lat + ", " + location.long + ", " + this.RADIUS_M + ")"
+  var params = "$where=within_circle(location," + location.lat + "," + location.long + "," + this.RADIUS_M + ")"
     " AND ( year > " + date.year + " OR ( year >= " + date.year + " AND month >= " + date.month + " ))" +
     "&$limit=" + limit;
 
@@ -138,6 +151,12 @@ toolkit.getIncidents = function(params, callback){
   }).on('error', function(e) {
     console.log("Got error: " + e.message);
   });
+};
+
+toolkit.getIncidentType = function(incident){
+  var incidentType = incidentTypes[incident.summarized_offense_description];
+  if (!incidentType){ incidentType = 'Other'};
+  return incidentType;
 };
 
 module.exports = toolkit;
