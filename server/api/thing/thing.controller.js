@@ -73,19 +73,22 @@ exports.getLocation = function(req, res) {
   if(req.query.lat && req.query.long) {
 
     var location = {lat: req.query.lat, long: req.query.long};
-    Toolkit.getLocationIncidentsRecords(location, function(incidentsRecords){
+    Toolkit.getLocationIncidentsRecords(location, function(incidentsRecords, lastMonthIncidents){
       Toolkit.findSeattleIncidentsRecords(function(seattleIncidentsRecords){
+
         var data = {
           isSafe:                  Toolkit.isSafe(seattleIncidentsRecords, incidentsRecords),
           incidentsRecords:        incidentsRecords,
           seattleIncidentsRecords: seattleIncidentsRecords,
+          lastMonthIncidents:      lastMonthIncidents,
           config: {
-            radiusM: Toolkit.RADIUS_M,
+            radiusM:       Toolkit.RADIUS_M,
             seattleAreaM2: Toolkit.SEATTLE_AREA_M2,
-            coeff: Toolkit.COEFF,
-            nbYears: Toolkit.NB_YEARS
+            coeff:         Toolkit.COEFF,
+            nbYears:       Toolkit.NB_YEARS
           }
         };
+
         return res.json(200, data);
       });
     });

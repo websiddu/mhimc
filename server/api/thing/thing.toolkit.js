@@ -134,12 +134,18 @@ toolkit.getLocationIncidentsRecords = function (location, callback) {
 
   this.getLocationIncidentsAfterDate(location, date, function (incidents){
     var incidentsRecords = _.map(dates, function(date){
-      var monthlyIncidents = _.filter(incidents, function(incident){
-        return (date.year == parseInt(incident.year, 10) && date.month == parseInt(incident.month, 10));
-      });
+      var monthlyIncidents = self.incidentsAtDate(incidents, date);
       return self.incidentsToIncidentsRecord(date.month, date.year, monthlyIncidents);
     });
-    callback.call(self, incidentsRecords);
+    var lastMonthIncidents = self.incidentsAtDate(incidents, _.first(dates));
+    callback.call(self, incidentsRecords, lastMonthIncidents);
+  });
+};
+
+toolkit.incidentsAtDate = function (incidents, date) {
+  return _.filter(incidents, {
+    year:  date.year.toString(),
+    month: date.month.toString()
   });
 };
 
