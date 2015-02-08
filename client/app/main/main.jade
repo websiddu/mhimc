@@ -10,11 +10,9 @@ header#banner.hero-unit
     br
     .locaiton-input
       form(ng-submit="loadResults()")
-        input.form-control.locaiton-input-text(type="text", ng-autocomplete, ng-model="address", options="addressOptions", details="details", autofocus="true", placeholder="Type Address, Neighborhood, City or Zip")
+        input.form-control.locaiton-input-text(type="text", id="address", ng-autocomplete='true', ng-model="address", options="addressOptions", details="details", autofocus="true", placeholder="Type Address, Neighborhood, City or Zip")
         em.fa.fa-map-marker
         button.hidden(type='submit')
-
-
 
 //- .container
 //-   .row
