@@ -11,7 +11,12 @@ var IncidentsRecordSchema = new Schema({
   totalIncidentsOther: Number,
   totalIncidentsProperty: Number,
   totalIncidentsViolentCrime: Number,
-  totalIncidentsPublicPeace: Number
+  totalIncidentsPublicPeace: Number,
+  averageIncidents: Number,
+  averageIncidentsOther: Number,
+  averageIncidentsProperty: Number,
+  averageIncidentsViolentCrime: Number,
+  averageIncidentsPublicPeace: Number
 
 });
 

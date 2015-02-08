@@ -80,12 +80,12 @@ exports.getLocation = function(req, res) {
           incidentsRecords:        incidentsRecords,
           seattleIncidentsRecords: seattleIncidentsRecords,
           config: {
-            radiusM: toolkit.RADIUS_M,
-            seattleAreaM2: toolkit.SEATTLE_AREA_M2,
-            coeff: toolkit.COEFF,
-            nbYears: toolkit.NB_YEARS
+            radiusM: Toolkit.RADIUS_M,
+            seattleAreaM2: Toolkit.SEATTLE_AREA_M2,
+            coeff: Toolkit.COEFF,
+            nbYears: Toolkit.NB_YEARS
           }
-        }
+        };
         return res.json(200, data);
       });
     });

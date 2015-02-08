@@ -10,18 +10,25 @@ var toolkit = {
   RADIUS_M: 804,
   SEATTLE_AREA_M2: 217200000,
   COEFF: 1,
-  NB_YEARS: 3
+  NB_YEARS: 1
 };
 
-toolkit.computeScore = function(incidentsRecords){
-  return _.reduce(incidentsRecords, function (sum, incidentsRecord) {
+toolkit.computeScore = function(incidentsRecords, seattleFlag){
+  var totalIncidents = _.reduce(incidentsRecords, function (sum, incidentsRecord) {
     return sum + incidentsRecord.totalIncidents;
   }, 0);
+  if (seattleFlag){ return this.seattleAverageIncidents(totalIncidents);};
+  return totalIncidents;
 };
 
-toolkit.incidentsToIncidentsRecord = function(month, year, incidents){
+toolkit.seattleAverageIncidents = function(totalIncidents){
+  var locationArea = this.RADIUS_M*this.RADIUS_M*Math.PI;
+  return Math.round((totalIncidents*locationArea)/this.SEATTLE_AREA_M2);
+}
+
+toolkit.incidentsToIncidentsRecord = function(month, year, incidents, seattleFlag){
   var self = this;
-  var incidentsRecord = {
+  var iR = {
     month: month,
     year: year,
     date: new Date(year, month),
@@ -33,10 +40,18 @@ toolkit.incidentsToIncidentsRecord = function(month, year, incidents){
   };
 
   _.forEach(incidents, function (incident) {
-    incidentsRecord['totalIncidents' + self.getIncidentType(incident)]++;
+    iR['totalIncidents' + self.getIncidentType(incident)]++;
   });
 
-  return incidentsRecord;
+  if (!seattleFlag){ return iR;};
+
+  iR.averageIncidents             = this.seattleAverageIncidents(iR.totalIncidents);
+  iR.averageIncidentsOther        = this.seattleAverageIncidents(iR.totalIncidentsOther);
+  iR.averageIncidentsProperty     = this.seattleAverageIncidents(iR.totalIncidentsProperty);
+  iR.averageIncidentsViolentCrime = this.seattleAverageIncidents(iR.totalIncidentsViolentCrime);
+  iR.averageIncidentsPublicPeace  = this.seattleAverageIncidents(iR.totalIncidentsPublicPeace);
+
+  return iR;
 };
 
 toolkit.getDates = function(){
@@ -65,7 +80,7 @@ toolkit.computeSeattleIncidentsRecords = function(){
       if (!incidentsRecord){
         self.getSeattleIncidents(date.month, date.year, function(incidents){
           console.log('Seattle incidents fetched: ', date.month + '/' + date.year, 'nb: ', incidents.length);
-          IncidentsRecord.create(self.incidentsToIncidentsRecord(date.month, date.year, incidents));
+          IncidentsRecord.create(self.incidentsToIncidentsRecord(date.month, date.year, incidents, true));
         });
       }
     });
@@ -74,10 +89,10 @@ toolkit.computeSeattleIncidentsRecords = function(){
 
 toolkit.isSafe = function(seattleIncidentsRecords, incidentsRecords){
   var score = this.computeScore(incidentsRecords);
-  var seattleScore = this.computeScore(seattleIncidentsRecords);
-  var locationArea = this.RADIUS_M*this.RADIUS_M*Math.PI;
-  console.log(this.SEATTLE_AREA_M2, score, locationArea, seattleScore, '====', this.SEATTLE_AREA_M2*score, this.COEFF*locationArea*seattleScore);
-  return this.SEATTLE_AREA_M2*score < this.COEFF*locationArea*seattleScore;
+
+  var seattleScore = this.computeScore(seattleIncidentsRecords, true);
+  console.log('seattleScore:', seattleScore, 'score:', score);
+  return score < this.COEFF*seattleScore;
 };
 
 toolkit.findSeattleIncidentsRecords = function(callback){
