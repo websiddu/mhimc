@@ -6,13 +6,15 @@ var _ = require('lodash');
 var IncidentsRecord = require('../incidentsRecord/incidentsRecord.model');
 
 var toolkit = {
-  RADIUS: 804
+  RADIUS_M: 804,
+  SEATTLE_AREA_M2: 217200000,
+  COEFF: 1
 };
 
-toolkit.computeLocationScore = function(incidentsRecords){
+toolkit.computeScore = function(incidentsRecords){
   return _.reduce(incidentsRecords, function (sum, incidentsRecord) {
     return sum + incidentsRecord.totalIncidents;
-  });
+  }, 0);
 };
 
 toolkit.incidentsToIncidentsRecord = function(month, year, incidents){
@@ -58,8 +60,11 @@ toolkit.computeSeattleIncidentsRecords = function(){
 };
 
 toolkit.isSafe = function(seattleIncidentsRecords, incidentsRecords){
-  var score = this.computeLocationScore(incidentsRecords);
-  return true;
+  var score = this.computeScore(incidentsRecords);
+  var seattleScore = this.computeScore(seattleIncidentsRecords);
+  var locationArea = this.RADIUS_M*this.RADIUS_M*Math.PI;
+  console.log(this.SEATTLE_AREA_M2, score, locationArea, seattleScore, '====', this.SEATTLE_AREA_M2*score, this.COEFF*locationArea*seattleScore);
+  return this.SEATTLE_AREA_M2*score < this.COEFF*locationArea*seattleScore;
 };
 
 toolkit.findSeattleIncidentsRecords = function(callback){
@@ -112,7 +117,7 @@ toolkit.getLocationIncidentsRecords = function (location, callback) {
 
 toolkit.getLocationIncidentsAfterDate = function (location, date, callback) {
   var limit = 50000;
-  var params = "$where=within_circle(location, " + location.lat + ", " + location.long + ", " + this.RADIUS + ")"
+  var params = "$where=within_circle(location, " + location.lat + ", " + location.long + ", " + this.RADIUS_M + ")"
     " AND ( year > " + date.year + " OR ( year >= " + date.year + " AND month >= " + date.month + " ))" +
     "&$limit=" + limit;
 
