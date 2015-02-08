@@ -30,6 +30,30 @@ toolkit.getSeattleIncidents = function (callback) {
   this.getIncidents(params, callback);
 };
 
+toolkit.getLocationRange = function (location){
+  return range = {
+    longitudeMin: -122.3402731,
+    longitudeMax: -122.3320708,
+    latitudeMin: 47.6062095,
+    latitudeMax: 47.6100497
+  };
+}
+
+toolkit.getLocationIncidents = function (location, callback) {
+  var limit = 2000;
+  var year = 2015;
+  var range = this.getLocationRange(location);
+
+  var params = "$where=" +
+    "latitude >= " + range.latitudeMin + " AND longitude <= " + range.latitudeMax + " AND " +
+    "longitude >= " + range.longitudeMin + " AND longitude <= " + range.longitudeMax + " AND " +
+    "year >= " + year +
+    "&$limit=" + limit;
+
+  this.getIncidents(params, callback);
+};
+
+
 toolkit.getIncidents = function(params, callback){
   var self;
   http.get('http://data.seattle.gov/resource/7ais-f98f.json?' + params, function(result) {
