@@ -11,6 +11,7 @@
 
 var _ = require('lodash');
 var Thing = require('./thing.model');
+var Toolkit = require('./thing.toolkit');
 var http = require('http');
 
 // Get list of things
@@ -66,7 +67,45 @@ exports.getsearch = function(req, res) {
       console.log("Got error: " + e.message);
     });
   }
-}
+};
+
+exports.getincidents = function(req, res) {
+  if(req.query.lat && req.query.long) {
+
+    var limit = 2000;
+    var year = 2015;
+    var range = {
+      longitudeMin: -122.3402731,
+      longitudeMax: -122.3320708,
+      latitudeMin: 47.6062095,
+      latitudeMax: 47.6100497
+    };
+
+    var params = "$where=" +
+      "latitude >= " + range.latitudeMin + " AND longitude <= " + range.latitudeMax + " AND " +
+      "longitude >= " + range.longitudeMin + " AND longitude <= " + range.longitudeMax + " AND " +
+      "year >= " + year +
+      "&$limit=" + limit;
+
+
+    http.get('http://data.seattle.gov/resource/7ais-f98f.json?' + params, function(result) {
+      var bodyChunks = [];
+      result.on('data', function(chunk) {
+        bodyChunks.push(chunk);
+      }).on('end', function() {
+
+
+        var body = Buffer.concat(bodyChunks);
+        var incidents = JSON.parse(body);
+
+        var isSafe = Toolkit.isSafe(incidents);
+        return res.json(200, isSafe)
+      })
+    }).on('error', function(e) {
+      console.log("Got error: " + e.message);
+    });
+  }
+};
 
 // Deletes a thing from the DB.
 exports.destroy = function(req, res) {
