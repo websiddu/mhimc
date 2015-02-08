@@ -29,7 +29,8 @@ exports.getseattledata = function(req, res) {
     if(err) { return handleError(res, err); }
     var seattle = {
         key: 'Avg. Crimes in seattle',
-        values: []
+        values: [],
+        color: 'red'
       };
 
     crimes.forEach(function(val){

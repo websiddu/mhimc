@@ -1,5 +1,6 @@
 'use strict'
 
+
 angular.module 'mhimcApp'
 .controller 'ResultsCtrl', ($scope, crimeData) ->
 
@@ -7,6 +8,7 @@ angular.module 'mhimcApp'
   $scope.currentAddress = localStorage['current_loaction']
   $scope.loading = true
   circle = null
+  seattledata = {"key":"Avg. Crimes in seattle","values":[[1325404800000, 45], [1328083200000, 41], [1330588800000,41],[1333263600000,42],[1335855600000,44],[1338534000000,45],[1341126000000,43],[1343804400000,46],[1346482800000,47],[1349074800000,44],[1351753200000,43],[1354348800000,40],[1357027200000,42],[1359705600000,46],[1362124800000,40],[1364799600000,46],[1367391600000,45],[1370070000000,51],[1372662000000,48],[1375340400000,52],[1378018800000,51],[1380610800000,50],[1383289200000,53],[1385884800000,50],[1388563200000,48],[1391241600000,51],[1393660800000,43],[1396335600000,61],[1398927600000,58],[1401606000000,55],[1404198000000,57],[1406876400000,88],[1409554800000,98],[1412146800000,88],[1414825200000,81],[1417420800000,45],[1420099200000,44],[1422777600000,53]],"color":"red"}
   _options =
     # maxBounds: bounds
     # zoomControl: false
@@ -75,39 +77,37 @@ angular.module 'mhimcApp'
 
     crimeData.inRadius(localStorage['lat'], localStorage['lng'], 804.4)
       .success (data, status) ->
-        crimeData.setattleData()
-          .success (seattledata, status) ->
-            data.chart.push(seattledata)
+          data.chart.push(seattledata)
 
-            nv.addGraph ->
-              chart = nv.models.lineChart()
-                .x((d) -> d[0])
-                .y((d) -> d[1])
-                .options({
-                  transitionDuration: 300,
-                  useInteractiveGuideline: true
-                })
+          nv.addGraph ->
+            chart = nv.models.lineChart()
+              .x((d) -> d[0])
+              .y((d) -> d[1])
+              .options({
+                transitionDuration: 300,
+                useInteractiveGuideline: true
+              })
 
-                # .margin(right: 100)
-                # .useInteractiveGuideline(true)
-                # .rightAlignYAxis(true)
-                # .showControls(true)
-                # .clipEdge(true)
+              # .margin(right: 100)
+              # .useInteractiveGuideline(true)
+              # .rightAlignYAxis(true)
+              # .showControls(true)
+              # .clipEdge(true)
 
-              chart.xAxis.tickFormat (d) ->
-                d3.time.format('%b %Y') new Date(d)
+            chart.xAxis.tickFormat (d) ->
+              d3.time.format('%b %Y') new Date(d)
 
-              chart.yAxis.tickFormat d3.format('f')
+            chart.yAxis.tickFormat d3.format('f')
 
-              d3.select('#chart svg').datum(data.chart).call chart
+            d3.select('#chart svg').datum(data.chart).call chart
 
-              nv.utils.windowResize chart.update
-              return
+            nv.utils.windowResize chart.update
+            return
 
-            data.mapdata.forEach (n) ->
-              hos = L.marker([parseFloat(n.location.latitude), parseFloat(n.location.longitude)]).addTo(map)
-              hos.bindPopup(n.hundred_block_location)
-              $scope.loading = false
+          data.mapdata.forEach (n) ->
+            hos = L.marker([parseFloat(n.location.latitude), parseFloat(n.location.longitude)]).addTo(map)
+            hos.bindPopup(n.hundred_block_location)
+            $scope.loading = false
 
 
 
