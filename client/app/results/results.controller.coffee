@@ -123,7 +123,7 @@ angular.module 'mhimcApp'
           $scope.data = data;
           # data.chart.push(seattledata)
 
-          if (data.supertotal / Math.PI) < seattleAvgIndex
+          if data.supertotal > seatteltotal
             $scope.isSafe = false;
             $scope.result = "No"
           else
