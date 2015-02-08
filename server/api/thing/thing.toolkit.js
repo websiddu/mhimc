@@ -9,7 +9,8 @@ var incidentTypes = require('./thing.incidentTypes');
 var toolkit = {
   RADIUS_M: 804,
   SEATTLE_AREA_M2: 217200000,
-  COEFF: 1
+  COEFF: 1,
+  NB_YEARS: 3
 };
 
 toolkit.computeScore = function(incidentsRecords){
@@ -39,13 +40,12 @@ toolkit.incidentsToIncidentsRecord = function(month, year, incidents){
 };
 
 toolkit.getDates = function(){
-  var years = 1;
   var today = new Date();
   var currentMonth = today.getMonth() + 1;
   var currentYear = today.getFullYear();
   var dates = [];
 
-  for (var i = 1; i <= (years*12); i++) {
+  for (var i = 1; i <= (this.NB_YEARS*12); i++) {
     currentMonth = (currentMonth - 1 > 0 ? currentMonth - 1 : 12);
     currentYear = (currentMonth == 12 ? currentYear - 1 : currentYear);
     dates.push({
@@ -58,18 +58,15 @@ toolkit.getDates = function(){
 
 toolkit.computeSeattleIncidentsRecords = function(){
   var self = this;
-  IncidentsRecord.count({}, function (err, count){
-    console.log('count=', count);
-    if (count == 0){
-      _.forEach(this.getDates(), function (date){
+  _.forEach(self.getDates(), function (date){
+    self.findSeattleIncidentsRecord(date.month, date.year, function(incidentsRecord){
+      if (!incidentsRecord){
         self.getSeattleIncidents(date.month, date.year, function(incidents){
           console.log('Seattle incidents', date.month, date.year, incidents.length);
-          _.forEach(incidents, function (incident){
-            IncidentsRecord.create(self.incidentsToIncidentsRecord(date.month, date.year, incidents));
-          });
+          IncidentsRecord.create(self.incidentsToIncidentsRecord(date.month, date.year, incidents));
         });
-      });
-    };
+      }
+    });
   });
 };
 
