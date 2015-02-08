@@ -48,7 +48,7 @@ angular.module 'mhimcApp'
     $scope.resultsview = true
 
   $scope.init = ->
-    _loadLocationCrimeDetails()
+    # _loadLocationCrimeDetails()
     _initMap()
     # _loadMedicalLayer()
 
@@ -63,13 +63,13 @@ angular.module 'mhimcApp'
 
 
   _initMap = ->
-    map = L.map('map', _options).setView([47.6094805,-122.3070454], 14)
+    map = L.map('map', _options).setView([localStorage['lat'], localStorage['lng']], 14)
     zoom = L.control.zoom
       position: 'bottomleft'
     tiles = L.tileLayer(tilesUrl, attributions)
-    map.addControl(zoom)
+    # map.addControl(zoom)
     tiles.addTo(map)
-    circle = L.circle([47.6255646, -122.3208213], 804.4, {
+    circle = L.circle([localStorage['lat'], localStorage['lng']], 804.4, {
         color: 'red',
         fillColor: '#f03',
         fillOpacity: 0.5
@@ -78,7 +78,7 @@ angular.module 'mhimcApp'
   _loadLocationCrimeDetails = ->
     $scope.loading = true
 
-    crimeData.inRadius(47.6255646, -122.3208213, 804.4)
+    crimeData.inRadius(localStorage['lat'], localStorage['lng'], 804.4)
       .success (data, status) ->
 
         $scope.loading = false
@@ -87,13 +87,12 @@ angular.module 'mhimcApp'
         crimes = []
         data.forEach (n) ->
 
-          dt = new Date(n.date_reported)
+          dt = new Date(n.occurred_date_or_date_range_start)
           dm = "m#{dt.getUTCMonth()}y#{dt.getUTCFullYear()}"
 
-          if dt.getUTCFullYear() is 2014
-            hos = L.marker([n.latitude, n.longitude]).addTo(map)
-            hos.bindPopup(n.hundred_block_location)
-
+          # if dt.getUTCFullYear() is 2014
+          #   hos = L.marker([n.latitude, n.longitude]).addTo(map)
+          #   hos.bindPopup(n.hundred_block_location)
 
           if newdata[dm] is undefined
             newdata[dm] = {}
@@ -119,7 +118,7 @@ angular.module 'mhimcApp'
           target: '#graph'
           x_accessor: 'date'
           y_accessor: 'count'
-        lr = L.marker([47.6255646, -122.3208213], {icon: houseIcon}).addTo(map)
-        lr.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+        # lr = L.marker([localStorage['lat'], localStorage['lng']], {icon: houseIcon}).addTo(map)
+        # lr.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
   $scope.init()

@@ -24,6 +24,13 @@
     }
     .result-details {
       display: block;
+      z-index: 22;
+    }
+    .page {
+      opacity: 1;
+    }
+    .result {
+      z-index: -1;
     }
   }
 }
@@ -32,8 +39,22 @@
   display: none;
 }
 
+.result {
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
 .result-details {
   display: none;
+}
+
+.page {
+  opacity: 0;
 }
 
 .result-button {
@@ -106,4 +127,19 @@ ul.res-sidebar-nav {
   img {
     width: 300px;
   }
+}
+
+.page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+#map {
+  position: absolute;
+  top: 60%;
+  bottom: 0;
+  width: 100%;
 }
