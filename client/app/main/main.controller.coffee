@@ -10,6 +10,7 @@ angular.module 'mhimcApp'
   $scope.details = null
   $scope.addressOptions =
     country: 'us'
+    state: 'wa'
     #types: '(cities)'
 
   $scope.loadResults = ->

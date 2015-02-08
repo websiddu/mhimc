@@ -1,33 +1,9 @@
-div.resutls(ng-class="{enabled: resultsview}")
-  .bg.c5
-  .container-fluid
-    .page
-      #map
-    .result
-      .result-button
-        = "Yes"
-      span.current-address {{currentAddress}}
-      br
-      .text-center
-        a.find-why(href="", ng-click="enableResultsView()") Find why
-
-    .result-details.row-fluid
-      //- .col-lg-3.col-sm-3
-      //-   .res-sidebar
-      //-     ul.res-sidebar-nav
-      //-       li
-      //-         a(href="") Super duper awesome
-      //-       li
-      //-         a(href="") Heath care
-      .col-lg-12.col-sm-12
-        //- tabset
-        //-   tab
-        //-     tab-heading Title
-        div.tab-content
-          .loader(ng-if="loading")
-            img.img-responsive(src="assets/images/loading.svg", alt="")
-            span.text-muted Loading...
-          .tab-main-content
-            #graph
-
+.page
+  #map
+  #chart
+    svg
+  .loader(ng-if="loading")
+    .img
+      img.img-responsive(src="assets/images/loading.svg", alt="")
+      span.text-muted Loading....
 

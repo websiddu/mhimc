@@ -73,8 +73,8 @@ toolkit.getDates = function(){
 
 toolkit.computeSeattleIncidentsRecords = function(){
   var self = this;
-  // IncidentsRecord.remove({}, function(){
-  // });
+  IncidentsRecord.remove({}, function(){
+  });
   _.forEach(self.getDates(), function (date){
     self.findSeattleIncidentsRecord(date.month, date.year, function(incidentsRecord){
       if (!incidentsRecord){
@@ -154,7 +154,7 @@ toolkit.incidentsAtDate = function (incidents, date) {
 
 toolkit.getLocationIncidentsAfterDate = function (location, date, callback) {
   var limit = 50000;
-  var params = "$where=within_circle(location," + location.lat + "," + location.long + "," + this.RADIUS_M + ") AND year>=2011&$limit=" + limit;
+  var params = "$where=within_circle(location," + location.lat + "," + location.long + "," + this.RADIUS_M + ") AND year>2011&$limit=" + limit;
 
   this.getIncidents(params, callback);
 };
@@ -168,6 +168,7 @@ toolkit.getIncidents = function(params, callback){
     }).on('end', function() {
       var body = Buffer.concat(bodyChunks);
       var incidents = JSON.parse(body);
+      console.log(incidents);
       callback.call(self, incidents);
     })
   }).on('error', function(e) {

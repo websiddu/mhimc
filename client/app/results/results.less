@@ -1,131 +1,26 @@
-.container {
-  z-index: 2;
-}
-
-.resutls {
-  &.enabled {
-    .find-why {
-      display: none;
-    }
-    .result-button {
-      font-size: 50px;
-      transition: all 0.3s ease-in-out;
-      margin: 0;
-      color: #43434a;
-      display: inline-block;
-    }
-    .bg.c5 {
-      .linear-gradient(@c101, @c102);
-    }
-    .current-address {
-      display: inline;
-      font-size: 18px;
-      color: #888;
-    }
-    .result-details {
-      display: block;
-      z-index: 22;
-    }
-    .page {
-      opacity: 1;
-    }
-    .result {
-      z-index: -1;
-    }
-  }
-}
-
-.current-address {
-  display: none;
-}
-
-.result {
-  z-index: 9999;
-  position: fixed;
+.loader {
   top: 0;
   left: 0;
-  right: 0;
   bottom: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 20000;
   overflow: hidden;
-}
+  position: absolute;
 
-.result-details {
-  display: none;
-}
-
-.page {
-  opacity: 0;
-}
-
-.result-button {
-  color: #fff;
-  transition: all 0.3s ease-in-out;
-  padding: 10px 20px;
-  text-align: center;
-  font-size: 200px;
-  margin: 0 auto;
-  font-weight: 300;
-  border-radius: 6px;
-}
-
-.find-why {
-  padding: 10px 25px;
-  background: #eee;
-  border-radius: 4px;
-  font-size: 23px;
-  color: #43434a;
-  font-weight: 300;
-  box-shadow: 0px 2px 0px #ccc;
-  transition: all 0.3s ease-in;
-  &:hover {
-    text-decoration: none;
-    box-shadow: 0px 2px 0px #fff;
-  }
-  &:focus {
-    text-decoration: none;
-  }
-}
-
-ul.res-sidebar-nav {
-  padding: 0;
-  margin: 50px -30px 0 0;
-  list-style-type: none;
-  li > a {
-    display: block;
-    border-bottom: solid 1px #ddd;
-    text-align: right;
-    padding: 10px 20px;
-    font-size: 17px;
-    color: #43434a;
-    font-weight: 300;
-    &:hover {
-      text-decoration: none;
-    }
-    &:focus {
-      text-decoration: none;
-    }
-  }
-}
-
-.res-sidebar {
-  min-height: 200px;
-}
-
-.maincontent {
-  overflow: hidden;
-  border-left: solid 1px #ddd;
-  margin: 0;
-  min-height: 700px;
-  padding: 20px;
-}
-
-.loader {
-  width: 400px;
-  margin: 0 auto;
-  margin-top: 200px;
-  text-align: center;
-  img {
+  .img {
     width: 300px;
+    height: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -150px;
+    text-align: center;
+    img {
+      width: 100%;
+
+    }
   }
 }
 
@@ -139,7 +34,22 @@ ul.res-sidebar-nav {
 
 #map {
   position: absolute;
-  top: 60%;
+  top: 0;
   bottom: 0;
-  width: 100%;
+  left: 0;
+  right: 0;
+}
+
+#chart {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+  height: 300px;
+  padding: 20px 0 0 0;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 }

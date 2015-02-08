@@ -48,7 +48,7 @@ angular.module 'mhimcApp'
     $scope.resultsview = true
 
   $scope.init = ->
-    # _loadLocationCrimeDetails()
+    _loadLocationCrimeDetails()
     _initMap()
     # _loadMedicalLayer()
 
@@ -75,50 +75,41 @@ angular.module 'mhimcApp'
         fillOpacity: 0.5
     }).addTo(map)
 
+    lr = L.marker([localStorage['lat'], localStorage['lng']], {icon: houseIcon}).addTo(map)
+    #lr.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+
+
   _loadLocationCrimeDetails = ->
     $scope.loading = true
 
     crimeData.inRadius(localStorage['lat'], localStorage['lng'], 804.4)
       .success (data, status) ->
+        nv.addGraph ->
+          chart = nv.models.stackedAreaChart()
+            .margin(right: 100)
+            .x((d) -> d[0])
+            .y((d) -> d[1])
+            .useInteractiveGuideline(true)
+            .rightAlignYAxis(true)
+            .showControls(true)
+            .clipEdge(true)
 
-        $scope.loading = false
-        i = 0;
-        newdata = {}
-        crimes = []
-        data.forEach (n) ->
+          chart.xAxis.tickFormat (d) ->
+            d3.time.format('%b %Y') new Date(d)
 
-          dt = new Date(n.occurred_date_or_date_range_start)
-          dm = "m#{dt.getUTCMonth()}y#{dt.getUTCFullYear()}"
+          chart.yAxis.tickFormat d3.format('f')
 
-          # if dt.getUTCFullYear() is 2014
-          #   hos = L.marker([n.latitude, n.longitude]).addTo(map)
-          #   hos.bindPopup(n.hundred_block_location)
+          d3.select('#chart svg').datum(data.chart).call chart
 
-          if newdata[dm] is undefined
-            newdata[dm] = {}
-            newdata[dm].count = 0
-            newdata[dm].date = new Date(dt.getUTCFullYear(), dt.getUTCMonth())
-          else
-            newdata[dm].count = newdata[dm].count + 1;
+          nv.utils.windowResize chart.update
+          return
 
-        dataToMap = []
+        data.mapdata.forEach (n) ->
+          hos = L.marker([parseFloat(n.location.latitude), parseFloat(n.location.longitude)]).addTo(map)
+          hos.bindPopup(n.hundred_block_location)
+          $scope.loading = false
 
 
-        for index, val of newdata
-          if val.date.getUTCFullYear() >= 2015
-            console.log "Dont do anythin.."
-          else
-            dataToMap.push(val)
 
-        MG.data_graphic
-          title: "UFO Sightings"
-          data: dataToMap
-          width: 800
-          height: 200
-          target: '#graph'
-          x_accessor: 'date'
-          y_accessor: 'count'
-        # lr = L.marker([localStorage['lat'], localStorage['lng']], {icon: houseIcon}).addTo(map)
-        # lr.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
   $scope.init()
