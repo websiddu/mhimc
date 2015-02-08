@@ -1,3 +1,55 @@
+
+#result {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  .linear-gradient(@c41, @c42);
+  z-index: 99999;
+  opacity: 1;
+}
+
+.result-button {
+  color: #fff;
+  transition: all 0.3s ease-in-out;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 200px;
+  margin: 0 auto;
+  font-weight: 300;
+  border-radius: 6px;
+}
+
+.find-why {
+  padding: 10px 25px;
+  background: #eee;
+  border-radius: 4px;
+  font-size: 23px;
+  color: #43434a;
+  font-weight: 300;
+  box-shadow: 0px 2px 0px #ccc;
+  transition: all 0.3s ease-in;
+  &:hover {
+    text-decoration: none;
+    box-shadow: 0px 2px 0px #fff;
+  }
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.result-box {
+  width: 400px;
+  text-align: center;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -200px;
+  margin-left: -200px;
+}
+
 .loader {
   top: 0;
   left: 0;

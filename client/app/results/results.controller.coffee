@@ -3,9 +3,9 @@
 angular.module 'mhimcApp'
 .controller 'ResultsCtrl', ($scope, crimeData) ->
 
-  $scope.resultsview = false
+  $scope.showResult = true
   $scope.currentAddress = localStorage['current_loaction']
-  $scope.loading = false
+  $scope.loading = true
   circle = null
   _options =
     # maxBounds: bounds
@@ -17,6 +17,8 @@ angular.module 'mhimcApp'
       '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
       'Imagery © <a href="http://mapbox.com">Mapbox</a>',
     id: 'examples.map-20v6611k'
+
+  L.Icon.Default.imagePath = '/assets/images/'
 
   hIcon = L.Icon.extend(options:
     shadowUrl: '/assets/images/house-shadow.png'
@@ -44,23 +46,12 @@ angular.module 'mhimcApp'
   houseIcon = new hIcon(iconUrl: '/assets/images/house.png')
   # cities = new L.LayerGroup()
 
-  $scope.enableResultsView = ->
-    $scope.resultsview = true
+  $scope.enableshowResult = ->
+    $scope.showResult = false
 
   $scope.init = ->
     _loadLocationCrimeDetails()
     _initMap()
-    # _loadMedicalLayer()
-
-
-  _loadMedicalLayer = ->
-    url = "https://data.medicare.gov/resource/hq9i-23gr.json?provider_state=WA"
-    $http
-      method: "GET"
-      url: url
-    .success (data, status) ->
-      _paintMedicalLayer(data)
-
 
   _initMap = ->
     map = L.map('map', _options).setView([localStorage['lat'], localStorage['lng']], 14)

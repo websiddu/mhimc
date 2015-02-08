@@ -6,4 +6,9 @@
     .img
       img.img-responsive(src="assets/images/loading.svg", alt="")
       span.text-muted Loading....
+  #result(ng-if="showResult")
+    .result-box
+      .result-button Yes
+      a.find-why(href="", ng-click="enableshowResult()") Find out why!
+
 
