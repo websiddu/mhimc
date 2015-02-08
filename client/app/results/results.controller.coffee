@@ -75,30 +75,39 @@ angular.module 'mhimcApp'
 
     crimeData.inRadius(localStorage['lat'], localStorage['lng'], 804.4)
       .success (data, status) ->
-        nv.addGraph ->
-          chart = nv.models.stackedAreaChart()
-            .margin(right: 100)
-            .x((d) -> d[0])
-            .y((d) -> d[1])
-            .useInteractiveGuideline(true)
-            .rightAlignYAxis(true)
-            .showControls(true)
-            .clipEdge(true)
+        crimeData.setattleData()
+          .success (seattledata, status) ->
+            data.chart.push(seattledata)
 
-          chart.xAxis.tickFormat (d) ->
-            d3.time.format('%b %Y') new Date(d)
+            nv.addGraph ->
+              chart = nv.models.lineChart()
+                .x((d) -> d[0])
+                .y((d) -> d[1])
+                .options({
+                  transitionDuration: 300,
+                  useInteractiveGuideline: true
+                })
 
-          chart.yAxis.tickFormat d3.format('f')
+                # .margin(right: 100)
+                # .useInteractiveGuideline(true)
+                # .rightAlignYAxis(true)
+                # .showControls(true)
+                # .clipEdge(true)
 
-          d3.select('#chart svg').datum(data.chart).call chart
+              chart.xAxis.tickFormat (d) ->
+                d3.time.format('%b %Y') new Date(d)
 
-          nv.utils.windowResize chart.update
-          return
+              chart.yAxis.tickFormat d3.format('f')
 
-        data.mapdata.forEach (n) ->
-          hos = L.marker([parseFloat(n.location.latitude), parseFloat(n.location.longitude)]).addTo(map)
-          hos.bindPopup(n.hundred_block_location)
-          $scope.loading = false
+              d3.select('#chart svg').datum(data.chart).call chart
+
+              nv.utils.windowResize chart.update
+              return
+
+            data.mapdata.forEach (n) ->
+              hos = L.marker([parseFloat(n.location.latitude), parseFloat(n.location.longitude)]).addTo(map)
+              hos.bindPopup(n.hundred_block_location)
+              $scope.loading = false
 
 
 

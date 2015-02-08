@@ -13,3 +13,9 @@ angular.module 'mhimcApp'
       method: 'GET'
       headers:
         "X-App-Token": 'FBAWy5PxzAcIlGEyOXSMflGBc'
+
+  setattleData: ->
+    $http
+      #url: "https://data.seattle.gov/resource/7ais-f98f.json#{query}"
+      url: "/api/crimes/seattle"
+      method: 'GET'

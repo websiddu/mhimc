@@ -4,6 +4,7 @@ var _ = require('lodash');
 var Crime = require('./crime.model');
 var http = require('http');
 var incidentTypes = require('../thing/thing.incidentTypes');
+var IncidentsRecord = require('../incidentsRecord/incidentsRecord.model');
 
 // Get list of crimes
 exports.index = function(req, res) {
@@ -21,6 +22,25 @@ exports.show = function(req, res) {
     return res.json(crime);
   });
 };
+
+
+exports.getseattledata = function(req, res) {
+  IncidentsRecord.find(function (err, crimes) {
+    if(err) { return handleError(res, err); }
+    var seattle = {
+        key: 'Avg. Crimes in seattle',
+        values: []
+      };
+
+    crimes.forEach(function(val){
+      seattle.values.push([val.date.getTime(), val.averageIncidents]);
+    });
+
+    seattle.values =  _.sortBy(seattle.values, function(n) { return n[0]});
+
+    return res.json(200, seattle);
+  });
+}
 
 
 exports.getcrimedata = function(req, res) {
@@ -105,6 +125,7 @@ exports.getcrimedata = function(req, res) {
         key: 'Other',
         values: []
       }
+
     };
 
     for (index in newdata) {
@@ -113,6 +134,7 @@ exports.getcrimedata = function(req, res) {
       datawithkeys['ViolentCrime'].values.push([val.date.getTime(), val.offence['ViolentCrime']])
       datawithkeys['Property'].values.push([val.date.getTime(), val.offence['Property']])
       datawithkeys['Other'].values.push([val.date.getTime(), val.offence['Other']])
+      // datawithkeys['Total'].values.push([val.date.getTime(), val.offence['Total']])
       if (val.date.getUTCFullYear() >= 2015) {
         console.log("Dont do anythin..");
       } else {

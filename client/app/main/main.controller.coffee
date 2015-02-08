@@ -17,11 +17,12 @@ angular.module 'mhimcApp'
 
     $timeout ->
       document.getElementById('address').blur()
+      console.log $scope.details
       localStorage['lat'] = $scope.details.geometry.location.lat()
       localStorage['lng'] = $scope.details.geometry.location.lng()
       localStorage['current_loaction'] = $scope.address;
       $location.path("/results")
-    , 100
+    , 500
 
 
 

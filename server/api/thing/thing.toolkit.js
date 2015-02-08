@@ -10,7 +10,7 @@ var toolkit = {
   RADIUS_M: 804,
   SEATTLE_AREA_M2: 217200000,
   COEFF: 1,
-  NB_YEARS: 1
+  NB_YEARS: 3
 };
 
 toolkit.computeScore = function(incidentsRecords, seattleFlag){
@@ -73,8 +73,8 @@ toolkit.getDates = function(){
 
 toolkit.computeSeattleIncidentsRecords = function(){
   var self = this;
-  IncidentsRecord.remove({}, function(){
-  });
+  // IncidentsRecord.remove({}, function(){
+  // });
   _.forEach(self.getDates(), function (date){
     self.findSeattleIncidentsRecord(date.month, date.year, function(incidentsRecord){
       if (!incidentsRecord){
@@ -168,7 +168,6 @@ toolkit.getIncidents = function(params, callback){
     }).on('end', function() {
       var body = Buffer.concat(bodyChunks);
       var incidents = JSON.parse(body);
-      console.log(incidents);
       callback.call(self, incidents);
     })
   }).on('error', function(e) {

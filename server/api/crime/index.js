@@ -5,6 +5,7 @@ var controller = require('./crime.controller');
 
 var router = express.Router();
 
+router.get('/seattle', controller.getseattledata);
 router.get('/:lat/:lng/:rad', controller.getcrimedata);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
