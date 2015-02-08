@@ -6,6 +6,11 @@ This application was developed on February 8th, 2015 for the [Hack Housing: Empo
 
 ![Isn't our app beautiful?!](http://i.imgur.com/ShtrYmu.png)
 
+
+## Watch demo
+
+[https://www.youtube.com/watch?v=2P3CzygI2_A&feature=youtu.be&hd=1](https://www.youtube.com/watch?v=2P3CzygI2_A&feature=youtu.be&hd=1)
+
 Our app is live at http://canilivehere.herokuapp.com/. You can input your address in Seattle on the main page, and click enter to see our suggestion.
 
 ## Challenge and Approach

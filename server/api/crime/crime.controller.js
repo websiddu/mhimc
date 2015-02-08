@@ -131,7 +131,7 @@ exports.getcrimedata = function(req, res) {
         values: []
       },
       'Total': {
-          key: 'Incidents near your locaiton',
+          key: 'Incidents near you',
           values: []
         }
     };
