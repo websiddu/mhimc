@@ -1,2 +1,35 @@
-.col-md-12
-    | This is the results view.
+div.resutls(ng-class="{enabled: resultsview}")
+  .bg.c5
+  .container
+    .result-button
+      = "Yes"
+    span.current-address {{currentAddress}}
+    br
+    .text-center
+      a.find-why(href="", ng-click="enableResultsView()") Find why
+    .result-details.row
+      .col-lg-3.col-sm-3
+        .res-sidebar
+          ul.res-sidebar-nav
+            li
+              a(href="") Super duper awesome
+            li
+              a(href="") Heath care
+      .col-lg-9.col-sm-9
+        .maincontent
+          tabset
+            tab
+              tab-heading Title
+              div.tab-content
+                .loader(ng-if="loading")
+                  img.img-responsive(src="assets/images/loading.svg", alt="")
+                  span.text-muted Loading...
+                .tab-main-content
+                  #graph
+
+            tab
+              tab-heading Title
+              div
+
+
+
