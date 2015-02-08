@@ -138,6 +138,9 @@ toolkit.getLocationIncidentsRecords = function (location, callback) {
       return self.incidentsToIncidentsRecord(date.month, date.year, monthlyIncidents);
     });
     var lastMonthIncidents = self.incidentsAtDate(incidents, _.first(dates));
+    _.forEach(lastMonthIncidents, function(lastMonthIncident){
+      lastMonthIncident.incidentType = self.getIncidentType(lastMonthIncident);
+    });
     callback.call(self, incidentsRecords, lastMonthIncidents);
   });
 };
