@@ -69,13 +69,19 @@ exports.getsearch = function(req, res) {
   }
 };
 
-exports.getincidents = function(req, res) {
+exports.getLocation = function(req, res) {
   if(req.query.lat && req.query.long) {
 
     var location = {lat: req.query.lat, long: req.query.long};
-    Toolkit.getLocationIncidents(location, function(incidents){
-      var isSafe = Toolkit.isSafe(incidents);
-      return res.json(200, isSafe)
+    Toolkit.getLocationIncidentsRecords(location, function(incidentsRecords){
+      Toolkit.findSeattleIncidentsRecords(function(seattleIncidentsRecords){
+        var data = {
+          isSafe:                  Toolkit.isSafe(seattleIncidentsRecords, incidentsRecords),
+          incidentsRecords:        incidentsRecords,
+          seattleIncidentsRecords: seattleIncidentsRecords
+        }
+        return res.json(200, data);
+      });
     });
   }
 };
