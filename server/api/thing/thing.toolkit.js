@@ -28,8 +28,8 @@ toolkit.incidentsToIncidentsRecord = function(month, year, incidents){
 toolkit.getDates = function(){
   var years = 1;
   var today = new Date();
-  var currentMonth = today.getMonth() + 1;
-  var currentYear = today.getFullYear();
+  var currentMonth = today.getUTCMonth() + 1;
+  var currentYear = today.getUTCFullYear();
   var dates = [];
 
   for (var i = 1; i <= (years*12); i++) {
@@ -47,7 +47,7 @@ toolkit.computeSeattleIncidentsRecords = function(){
   var self = this;
   IncidentsRecord.count({}, function (err, a){
     if (a == 0){
-      _.forEach(this.getDates(), function (date){
+      _.forEach(self.getDates(), function (date){
         self.getSeattleIncidents(date.month, date.year, function(incidents){
           console.log('Seattle incidents', date.month, date.year, incidents.length);
           _.forEach(incidents, function (incident){
@@ -105,28 +105,56 @@ toolkit.getLocationIncidentsRecords = function (location, callback) {
   var date = _.last(dates);
 
   this.getLocationIncidentsAfterDate(location, date, function (incidents){
-    var incidentsRecords = _.map(dates, function(date){
-      var monthlyIncidents = _.filter(incidents, function(incident){
-        return (date.year == parseInt(incident.year, 10) && date.month == parseInt(incident.month, 10));
-      });
-      return self.incidentsToIncidentsRecord(date.month, date.year, monthlyIncidents);
-    });
-    callback.call(self, incidentsRecords);
+    var newdata = [];
+    incidents.forEach(function(val) {
+
+      var dt = new Date(val.occurred_date_or_date_range_start);
+      var dm = "m"+ dt.getUTCMonth() + "y" + dt.getUTCFullYear()
+
+      console.log(val);
+
+      if(newdata[dm] == undefined){
+        newdata[dm] = {};
+        newdata[dm].count = 0;
+        newdata[dm].incidents = {}
+        newdata[dm].date = new Date(dt.getUTCFullYear(), dt.getUTCMonth()-1);
+      }
+      else {
+        newdata[dm].count = newdata[dm].count + 1;
+        // newdata[dm].incident[dm.offense_type] =
+      }
+    })
+
+    var formap = []
+
+    for(var key in newdata) {
+      if(newdata[key].date.getUTCFullYear() < 2015)
+        formap.push(newdata[key])
+    }
+
+    console.log(formap);
+
+
+
+    // var incidentsRecords = _.map(dates, function(date){
+    //   var monthlyIncidents = _.filter(incidents, function(incident){
+    //     return (date.year == parseInt(incident.year, 10) && date.month == parseInt(incident.month, 10));
+    //   });
+    //   return self.incidentsToIncidentsRecord(date.month, date.year, monthlyIncidents);
+    // });
+    // callback.call(self, incidentsRecords);
   });
 };
 
 toolkit.getLocationIncidentsAfterDate = function (location, date, callback) {
   var limit = 50000;
-  var params = "$where=within_circle(location, " + location.lat + ", " + location.long + ", " + this.RADIUS_M + ")"
-    " AND ( year > " + date.year + " OR ( year >= " + date.year + " AND month >= " + date.month + " ))" +
-    "&$limit=" + limit;
-
+  var params = "?$where=within_circle(location," + location.lat + "," + location.long + ",804) AND year>2011&$limit=" + limit
   this.getIncidents(params, callback);
 };
 
 toolkit.getIncidents = function(params, callback){
   var self;
-  http.get('http://data.seattle.gov/resource/7ais-f98f.json?' + params, function(result) {
+  http.get('http://data.seattle.gov/resource/7ais-f98f.json' + params, function(result) {
     var bodyChunks = [];
     result.on('data', function(chunk) {
       bodyChunks.push(chunk);

@@ -80,45 +80,52 @@ angular.module 'mhimcApp'
 
     crimeData.inRadius(47.6255646, -122.3208213, 804.4)
       .success (data, status) ->
+        console.log data
 
         $scope.loading = false
-        i = 0;
-        newdata = {}
-        crimes = []
-        data.forEach (n) ->
-
-          dt = new Date(n.date_reported)
-          dm = "m#{dt.getUTCMonth()}y#{dt.getUTCFullYear()}"
-
-          if dt.getUTCFullYear() is 2014
-            hos = L.marker([n.latitude, n.longitude]).addTo(map)
-            hos.bindPopup(n.hundred_block_location)
+        newdata = []
+        data.incidentsRecords.forEach (n) ->
+          n.date = new Date(n.year, n.month)
+          newdata.push(n)
 
 
-          if newdata[dm] is undefined
-            newdata[dm] = {}
-            newdata[dm].count = 0
-            newdata[dm].date = new Date(dt.getUTCFullYear(), dt.getUTCMonth())
-          else
-            newdata[dm].count = newdata[dm].count + 1;
+        # i = 0;
+        # newdata = {}
+        # crimes = []
+        # data.forEach (n) ->
 
-        dataToMap = []
+        #   dt = new Date(n.date_reported)
+        #   dm = "m#{dt.getUTCMonth()}y#{dt.getUTCFullYear()}"
+
+        #   if dt.getUTCFullYear() is 2014
+        #     hos = L.marker([n.latitude, n.longitude]).addTo(map)
+        #     hos.bindPopup(n.hundred_block_location)
 
 
-        for index, val of newdata
-          if val.date.getUTCFullYear() >= 2015
-            console.log "Dont do anythin.."
-          else
-            dataToMap.push(val)
+        #   if newdata[dm] is undefined
+        #     newdata[dm] = {}
+        #     newdata[dm].count = 0
+        #     newdata[dm].date = new Date(dt.getUTCFullYear(), dt.getUTCMonth())
+        #   else
+        #     newdata[dm].count = newdata[dm].count + 1;
+
+        # dataToMap = []
+
+
+        # for index, val of newdata
+        #   if val.date.getUTCFullYear() >= 2015
+        #     console.log "Dont do anythin.."
+        #   else
+        #     dataToMap.push(val)
 
         MG.data_graphic
           title: "UFO Sightings"
-          data: dataToMap
+          data: newdata
           width: 800
           height: 200
           target: '#graph'
           x_accessor: 'date'
-          y_accessor: 'count'
+          y_accessor: 'totalIncidents'
         lr = L.marker([47.6255646, -122.3208213], {icon: houseIcon}).addTo(map)
         lr.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
