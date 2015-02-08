@@ -130,9 +130,7 @@ toolkit.getLocationIncidentsRecords = function (location, callback) {
 
 toolkit.getLocationIncidentsAfterDate = function (location, date, callback) {
   var limit = 50000;
-  var params = "$where=within_circle(location," + location.lat + "," + location.long + "," + this.RADIUS_M + ")"
-    " AND ( year > " + date.year + " OR ( year >= " + date.year + " AND month >= " + date.month + " ))" +
-    "&$limit=" + limit;
+  var params = "$where=within_circle(location," + location.lat + "," + location.long + "," + this.RADIUS_M + ") AND year>" + date.year + " OR(year>=" + date.year + " AND month>= " + date.month + ")&$limit=" + limit;
 
   this.getIncidents(params, callback);
 };
